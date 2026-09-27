@@ -34,6 +34,46 @@
   .contact-list a { color: var(--mid); text-decoration: none; border-bottom: 0.5px solid transparent; transition: color 0.2s, border-color 0.2s; }
   .contact-list a:hover { color: var(--copper); border-bottom-color: var(--copper); }
 
+  /* correlation lab */
+  .lab { opacity: 0; transform: translateY(14px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .lab.visible { opacity: 1; transform: translateY(0); }
+  .lab-title { font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 400; letter-spacing: -0.01em; margin-bottom: 0.45rem; }
+  .lab-title em { font-style: italic; color: var(--copper); }
+  .lab-text { font-size: 0.84rem; color: var(--mid); max-width: 52ch; margin-bottom: 1.5rem; }
+  .lab-text em { font-style: italic; color: var(--copper); }
+  .lab-body { display: grid; grid-template-columns: 1fr 186px; gap: 2rem; align-items: start; }
+  .lab-plot { background: var(--white); border: 0.5px solid var(--faint); border-radius: 3px; overflow: hidden; }
+  .lab-plot svg { display: block; width: 100%; height: auto; cursor: crosshair; }
+  .lab-axis { stroke: var(--faint); stroke-width: 0.5; }
+  .lab-axis-label { font-family: 'Inter', sans-serif; font-size: 8px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; fill: var(--faint); }
+  .lab-dot { fill: var(--copper); fill-opacity: 0.5; stroke: var(--copper); stroke-width: 0.5; stroke-opacity: 0.7; }
+
+  .lab-r-label { font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.15rem; }
+  .lab-r { font-family: 'Playfair Display', serif; font-size: 2.5rem; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .lab-levers { display: flex; flex-direction: column; gap: 0.4rem; margin: 1.3rem 0 1rem; }
+  .lever { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; width: 100%; text-align: left; font-family: 'Inter', sans-serif; font-size: 0.72rem; color: var(--mid); background: var(--bg); border: 0.5px solid var(--faint); border-radius: 2px; padding: 0.45rem 0.65rem; cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; }
+  .lever-code { font-family: 'Courier New', monospace; letter-spacing: 0.02em; }
+  .lever-note { font-size: 0.62rem; letter-spacing: 0.05em; color: var(--faint); transition: color 0.2s; }
+  .lever:hover { border-color: var(--copper); color: var(--copper); }
+  .lever.active { background: var(--copper); border-color: var(--copper); color: var(--white); }
+  .lever.active .lever-note { color: var(--white); opacity: 0.75; }
+  .lab-reset { display: inline-block; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--faint); background: none; border: none; padding: 0; cursor: pointer; transition: color 0.2s; }
+  .lab-reset:hover { color: var(--copper); }
+  .lab-caption { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.8rem; color: var(--mid); line-height: 1.6; min-height: 5.5em; margin-top: 1rem; transition: opacity 0.3s; }
+  .lab-progress { display: flex; gap: 0.3rem; margin-top: 0.2rem; }
+  .lab-pip { width: 4px; height: 4px; border-radius: 50%; border: 0.5px solid var(--faint); transition: background 0.4s, border-color 0.4s; }
+  .lab-pip.on { background: var(--copper); border-color: var(--copper); }
+  .lab-dag { margin-top: 1.1rem; opacity: 0; transform: translateY(6px); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; }
+  .lab-dag.show { opacity: 1; transform: translateY(0); }
+  .lab-dag svg { display: block; width: 100%; height: auto; }
+  .dag-node { font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.1em; fill: var(--mid); }
+  .dag-edge { stroke: var(--copper); stroke-width: 0.9; fill: none; }
+  .dag-null { stroke: var(--faint); stroke-width: 0.7; stroke-dasharray: 3 3; fill: none; }
+
+  @media (max-width: 880px) {
+    .lab-body { grid-template-columns: 1fr; }
+  }
+
   /* sections — default: label left */
   .section { display: grid; grid-template-columns: 160px 1fr; gap: 4rem; padding: 4rem 0; border-bottom: 0.5px solid var(--faint); }
   .section:last-child { border-bottom: none; }
@@ -117,6 +157,61 @@
         <li><span class="contact-label">LinkedIn</span><a href="https://linkedin.com/in/ernakuginyte" target="_blank">ernakuginyte</a></li>
         <li><span class="contact-label">GitHub</span><a href="https://github.com/ekuginyte" target="_blank">ekuginyte</a></li>
       </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Aside</div>
+    <div class="lab" id="lab">
+      <h2 class="lab-title">Correlation ≠ <em>Causation</em></h2>
+      <p class="lab-text">Ice cream sales and sunburns rise and fall together — but does one cause the other? Watching can't tell you. <em>Intervene</em>: force a variable to a new value and see what follows.</p>
+
+      <div class="lab-body">
+        <div class="lab-plot">
+          <svg id="lab-svg" viewBox="0 0 470 300" xmlns="http://www.w3.org/2000/svg">
+            <line class="lab-axis" x1="54" y1="22" x2="54" y2="244"/>
+            <line class="lab-axis" x1="54" y1="244" x2="448" y2="244"/>
+            <g id="lab-points"></g>
+            <text class="lab-axis-label" x="251" y="268" text-anchor="middle">Ice cream sales →</text>
+            <text class="lab-axis-label" x="0" y="0" text-anchor="middle" transform="translate(30,133) rotate(-90)">Sunburns →</text>
+          </svg>
+        </div>
+
+        <div class="lab-side">
+          <div class="lab-r-label">Correlation</div>
+          <div class="lab-r" id="lab-r">0.90</div>
+
+          <div class="lab-levers">
+            <button class="lever" data-do="x"><span class="lever-code">do(X)</span><span class="lever-note">force ice cream</span></button>
+            <button class="lever" data-do="y"><span class="lever-code">do(Y)</span><span class="lever-note">force sunburns</span></button>
+            <button class="lever" data-do="z"><span class="lever-code">do(Z)</span><span class="lever-note">force temperature</span></button>
+          </div>
+
+          <button class="lab-reset" id="lab-reset">↻ just observe</button>
+          <div class="lab-progress" id="lab-progress">
+            <span class="lab-pip"></span><span class="lab-pip"></span><span class="lab-pip"></span>
+          </div>
+
+          <p class="lab-caption" id="lab-caption">Only observing. The two move together almost perfectly — but observation alone can never tell you why.</p>
+
+          <div class="lab-dag" id="lab-dag">
+            <svg viewBox="0 0 186 96" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="dag-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                  <path d="M0,1 L7,4 L0,7" fill="none" stroke="#c47a3a" stroke-width="1"/>
+                </marker>
+              </defs>
+              <text class="dag-node" x="93" y="16" text-anchor="middle">TEMPERATURE</text>
+              <text class="dag-node" x="22" y="80" text-anchor="middle">X</text>
+              <text class="dag-node" x="164" y="80" text-anchor="middle">Y</text>
+              <path class="dag-edge" d="M78,24 C55,38 32,52 24,68" marker-end="url(#dag-arrow)"/>
+              <path class="dag-edge" d="M108,24 C131,38 154,52 162,68" marker-end="url(#dag-arrow)"/>
+              <path class="dag-null" d="M34,76 L152,76"/>
+              <path class="dag-null" d="M89,71 L97,81 M97,71 L89,81"/>
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -286,8 +381,134 @@
       }
     });
   }, { threshold: 0.08 });
-  document.querySelectorAll('.role, .edu-item, .project-card, .skill-group, .personal-row')
+  document.querySelectorAll('.lab, .role, .edu-item, .project-card, .skill-group, .personal-row')
     .forEach(el => observer.observe(el));
+
+  /* ---- correlation lab ----
+     Latent model: z is the confounder (temperature); x and y each load on z
+     plus independent noise, so corr(x,y) = C^2 with no arrow between them.
+     An intervention do(V) severs V from z and redraws it independently. */
+  (function () {
+    const svg = document.getElementById('lab-svg');
+    if (!svg) return;
+    const NS = 'http://www.w3.org/2000/svg';
+    const N = 64, C = 0.95, S = Math.sqrt(1 - C * C);
+    const X0 = 54, X1 = 448, Y0 = 22, Y1 = 244, RANGE = 3;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const mapX = v => X0 + (v + RANGE) / (2 * RANGE) * (X1 - X0);
+    const mapY = v => Y1 - (v + RANGE) / (2 * RANGE) * (Y1 - Y0);
+    const gauss = () => {
+      let u = 0, v = 0;
+      while (!u) u = Math.random();
+      while (!v) v = Math.random();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    };
+
+    const layer = document.getElementById('lab-points');
+    const pts = [];
+    for (let i = 0; i < N; i++) {
+      const el = document.createElementNS(NS, 'circle');
+      el.setAttribute('r', '3.1');
+      el.setAttribute('class', 'lab-dot');
+      layer.appendChild(el);
+      pts.push({ el, z: gauss(), nx: gauss(), ny: gauss(), fx: 0, fy: 0, px: 0, py: 0, tx: 0, ty: 0, ox: 0, oy: 0 });
+    }
+
+    const rEl    = document.getElementById('lab-r');
+    const capEl  = document.getElementById('lab-caption');
+    const dagEl  = document.getElementById('lab-dag');
+    const pips   = [...document.getElementById('lab-progress').children];
+    const levers = [...document.querySelectorAll('.lever')];
+    const tried  = { x: false, y: false, z: false };
+
+    const CAPTIONS = {
+      observe: 'Only observing. The two move together almost perfectly — but observation alone can never tell you why.',
+      x: 'You forced ice cream sales. Sunburns didn\'t move at all, and the correlation vanished. X does not cause Y.',
+      y: 'You forced sunburns. Ice cream sales stayed exactly where they were. Y does not cause X.',
+      z: 'You changed the temperature — and both moved together, correlation intact. Z is the common cause.',
+      done: 'Z drives both. X and Y were never connected: their correlation was confounding all along.'
+    };
+
+    let mode = 'observe', targetR = 0, shownR = 0;
+
+    function setMode(m) {
+      mode = m;
+      if (m === 'z') pts.forEach(p => { p.z = gauss(); });
+      if (m === 'x') pts.forEach(p => { p.fx = gauss(); });
+      if (m === 'y') pts.forEach(p => { p.fy = gauss(); });
+      if (m === 'observe') pts.forEach(p => { p.z = gauss(); p.nx = gauss(); p.ny = gauss(); });
+
+      pts.forEach(p => {
+        p.tx = (m === 'x') ? p.fx : C * p.z + S * p.nx;
+        p.ty = (m === 'y') ? p.fy : C * p.z + S * p.ny;
+      });
+
+      targetR = pearson();
+      levers.forEach(b => b.classList.toggle('active', b.dataset.do === m));
+
+      if (m !== 'observe') {
+        tried[m] = true;
+        pips.forEach((pip, i) => pip.classList.toggle('on', tried[['x', 'y', 'z'][i]]));
+      }
+      const all = tried.x && tried.y && tried.z;
+      capEl.textContent = (all && m === 'z') ? CAPTIONS.done : CAPTIONS[m];
+      dagEl.classList.toggle('show', all);
+    }
+
+    function pearson() {
+      let mx = 0, my = 0;
+      pts.forEach(p => { mx += p.tx; my += p.ty; });
+      mx /= N; my /= N;
+      let sxy = 0, sxx = 0, syy = 0;
+      pts.forEach(p => {
+        const a = p.tx - mx, b = p.ty - my;
+        sxy += a * b; sxx += a * a; syy += b * b;
+      });
+      return sxy / (Math.sqrt(sxx * syy) || 1);
+    }
+
+    // seed positions at their targets so the first paint is settled
+    setMode('observe');
+    pts.forEach(p => { p.px = p.tx; p.py = p.ty; });
+    shownR = targetR;
+
+    function frame() {
+      const k = reduce ? 1 : 0.075;
+      for (const p of pts) {
+        p.px += (p.tx - p.px) * k;
+        p.py += (p.ty - p.py) * k;
+        if (!reduce) { p.ox *= 0.9; p.oy *= 0.9; }
+        p.el.setAttribute('cx', (mapX(p.px) + p.ox).toFixed(2));
+        p.el.setAttribute('cy', (mapY(p.py) + p.oy).toFixed(2));
+      }
+      shownR += (targetR - shownR) * 0.09;
+      rEl.textContent = (Math.abs(shownR) < 0.005 ? 0 : shownR).toFixed(2);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    // cursor nudges the cloud so it feels alive before you touch a lever
+    if (!reduce) {
+      svg.addEventListener('mousemove', e => {
+        const box = svg.getBoundingClientRect();
+        const mx = (e.clientX - box.left) / box.width * 470;
+        const my = (e.clientY - box.top) / box.height * 300;
+        for (const p of pts) {
+          const dx = mapX(p.px) + p.ox - mx, dy = mapY(p.py) + p.oy - my;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < 2600 && d2 > 0.5) {
+            const f = (1 - d2 / 2600) * 6 / Math.sqrt(d2);
+            p.ox = Math.max(-26, Math.min(26, p.ox + dx * f));
+            p.oy = Math.max(-26, Math.min(26, p.oy + dy * f));
+          }
+        }
+      });
+    }
+
+    levers.forEach(b => b.addEventListener('click', () => setMode(b.dataset.do)));
+    document.getElementById('lab-reset').addEventListener('click', () => setMode('observe'));
+  })();
 </script>
 
 </body>
